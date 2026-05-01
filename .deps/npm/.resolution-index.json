@@ -38,11 +38,86 @@
       }
     }
   },
+  "contracts/HelloWorld.sol": {
+    "__sources__": {
+      "contracts/HelloWorld.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract HelloWorld{\r\n    string message;\r\n    address owner;\r\n    constructor(){\r\n        message = \"Hello World!\";\r\n        owner = msg.sender;\r\n    }\r\n    // 为消息更新添加事件，方便前端或日志追踪\r\n    event updateMessage(string oldMessage, string newMessage);\r\n    function getMessage()public view returns(string memory){\r\n        return message;\r\n    }\r\n    // 函数修饰器，只有 owner 可以更新消息\r\n    modifier onlyOwner(){\r\n        require(msg.sender == owner, \"Only Owner can update message.\");\r\n        _;\r\n    }\r\n\r\n    function setMessage(string memory _message)public onlyOwner{\r\n        string memory old = message;\r\n        message = string.concat(\"Hello \", _message);\r\n        emit updateMessage(old, message);\r\n    }\r\n}",
+        "file": "contracts/HelloWorld.sol"
+      }
+    }
+  },
+  "contracts/StudentRegistry.sol": {
+    "__sources__": {}
+  },
+  "contracts/1.HelloWorld.sol": {
+    "__sources__": {
+      "contracts/1.HelloWorld.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract HelloWorld{\r\n    string message;\r\n    address owner;\r\n    constructor(){\r\n        message = \"Hello World!\";\r\n        owner = msg.sender;\r\n    }\r\n    // 为消息更新添加事件，方便前端或日志追踪\r\n    event updateMessage(string oldMessage, string newMessage);\r\n    function getMessage()public view returns(string memory){\r\n        return message;\r\n    }\r\n    // 函数修饰器，只有 owner 可以更新消息\r\n    modifier onlyOwner(){\r\n        require(msg.sender == owner, \"Only Owner can update message.\");\r\n        _;\r\n    }\r\n\r\n    function setMessage(string memory _message)public onlyOwner{\r\n        string memory old = message;\r\n        message = string.concat(\"Hello \", _message);\r\n        emit updateMessage(old, message);\r\n    }\r\n}",
+        "file": "contracts/1.HelloWorld.sol"
+      }
+    }
+  },
+  "contracts/SimpleStorage.sol": {
+    "__sources__": {
+      "contracts/SimpleStorage.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract SimpleStorage{\r\n    uint8 public x;\r\n    address owner;\r\n    string message;\r\n    bool flag;\r\n\r\n    constructor(string memory _message, uint8 _x) {\r\n        message = _message;\r\n        owner = msg.sender;\r\n        x = _x;\r\n    }\r\n\r\n    modifier onlyOwner(){\r\n        require(msg.sender == owner);\r\n        _;\r\n    }\r\n\r\n    function start() public onlyOwner{\r\n        flag = true;\r\n    }\r\n\r\n    function close() public onlyOwner{\r\n        flag = false;\r\n    }\r\n\r\n    function set(uint8 _x) public {\r\n        require(flag, \"flag is false!\");\r\n        x = _x;\r\n    }\r\n\r\n    function setMessage(string memory _message) public{\r\n        require(flag, \"flag is false!\");\r\n        message = _message;\r\n    }\r\n\r\n}",
+        "file": "contracts/SimpleStorage.sol"
+      }
+    }
+  },
+  "contracts/2.SimpleStorage.sol": {
+    "__sources__": {
+      "contracts/2.SimpleStorage.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract SimpleStorage{\r\n    uint8 public x;\r\n    address owner;\r\n    string message;\r\n    bool flag;\r\n\r\n    constructor(string memory _message, uint8 _x) {\r\n        message = _message;\r\n        owner = msg.sender;\r\n        x = _x;\r\n    }\r\n\r\n    modifier onlyOwner(){\r\n        require(msg.sender == owner);\r\n        _;\r\n    }\r\n\r\n    function start() public onlyOwner{\r\n        flag = true;\r\n    }\r\n\r\n    function close() public onlyOwner{\r\n        flag = false;\r\n    }\r\n\r\n    function set(uint8 _x) public {\r\n        require(flag, \"flag is false!\");\r\n        x = _x;\r\n    }\r\n\r\n    function setMessage(string memory _message) public{\r\n        require(flag, \"flag is false!\");\r\n        message = _message;\r\n    }\r\n\r\n}",
+        "file": "contracts/2.SimpleStorage.sol"
+      }
+    }
+  },
+  "contracts/VisibilityDemo.sol": {
+    "__sources__": {
+      "contracts/VisibilityDemo.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract A{\r\n    uint public x;\r\n    // 只能从所定义的合约中访问\r\n    uint private y;\r\n    // 只能从所定义的合约和派生合约中访问\r\n    uint internal z;\r\n\r\n    function setX(uint _x) public {\r\n        x = _x;\r\n    }\r\n\r\n    function setY(uint _y) public {\r\n        y = _y;\r\n    }\r\n\r\n    function setZ(uint _z) public {\r\n        z = _z;\r\n    }\r\n    // 不能从内部调用 （即 readY() 不起作用，但 this.readY() 可以）\r\n    function readY() external view returns(uint){\r\n        return y;\r\n    }\r\n\r\n    // 只能从当前的合约或从它派生出来的合约中访问\r\n    function readXZ() internal view returns(uint, uint){\r\n        return (x, z);\r\n    }\r\n\r\n    // 只能从当前的合约中访问\r\n    function readXY() private view returns(uint, uint){\r\n        return (x, y);\r\n    }\r\n\r\n    function readAll() public view returns(uint, uint, uint){\r\n        return (x, this.readY(), z);\r\n    }\r\n\r\n    function add(uint a, uint b) public pure returns (uint) {\r\n        return a + b;\r\n    }\r\n\r\n    function deposit() public payable {}\r\n\r\n    function getBalance() public view returns (uint) {\r\n        return address(this).balance;\r\n    }\r\n}\r\n\r\ncontract B is A{\r\n    function readX() public view returns(uint){\r\n        return x;\r\n    }\r\n\r\n    function readZ() public view returns(uint){\r\n        return z;\r\n    }\r\n}",
+        "file": "contracts/VisibilityDemo.sol"
+      }
+    }
+  },
+  "contracts/3.VisibilityDemo.sol": {
+    "__sources__": {
+      "contracts/3.VisibilityDemo.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract A{\r\n    uint public x;\r\n    // 只能从所定义的合约中访问\r\n    uint private y;\r\n    // 只能从所定义的合约和派生合约中访问\r\n    uint internal z;\r\n\r\n    function setX(uint _x) public {\r\n        x = _x;\r\n    }\r\n\r\n    function setY(uint _y) public {\r\n        y = _y;\r\n    }\r\n\r\n    function setZ(uint _z) public {\r\n        z = _z;\r\n    }\r\n    // 不能从内部调用 （即 readY() 不起作用，但 this.readY() 可以）\r\n    function readY() external view returns(uint){\r\n        return y;\r\n    }\r\n\r\n    // 只能从当前的合约或从它派生出来的合约中访问\r\n    function readXZ() internal view returns(uint, uint){\r\n        return (x, z);\r\n    }\r\n\r\n    // 只能从当前的合约中访问\r\n    function readXY() private view returns(uint, uint){\r\n        return (x, y);\r\n    }\r\n\r\n    function readAll() public view returns(uint, uint, uint){\r\n        return (x, this.readY(), z);\r\n    }\r\n\r\n    function add(uint a, uint b) public pure returns (uint) {\r\n        return a + b;\r\n    }\r\n\r\n    function deposit() public payable {}\r\n\r\n    function getBalance() public view returns (uint) {\r\n        return address(this).balance;\r\n    }\r\n}\r\n\r\ncontract B is A{\r\n    function readX() public view returns(uint){\r\n        return x;\r\n    }\r\n\r\n    function readZ() public view returns(uint){\r\n        return z;\r\n    }\r\n}",
+        "file": "contracts/3.VisibilityDemo.sol"
+      }
+    }
+  },
   "contracts/Hello.sol": {
     "__sources__": {
       "contracts/Hello.sol": {
         "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract Hello{\r\n    string public name;\r\n\r\n    function set(string memory _name) public {\r\n        name = _name;\r\n    }\r\n\r\n    function get() public view returns(string memory){\r\n        string memory ans = string.concat(\"Hello \", name);\r\n        return ans;\r\n    }\r\n\r\n\r\n}",
         "file": "contracts/Hello.sol"
+      }
+    }
+  },
+  "contracts/5.Ownable.sol": {
+    "__sources__": {
+      "contracts/5.Ownable.sol": {
+        "content": "\r\n// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Ownable{\r\n    address payable owner;\r\n    uint public num;\r\n\r\n    constructor(uint _num) {\r\n        owner = payable(msg.sender);\r\n        num = _num;\r\n    }\r\n\r\n    modifier onlyowner(){\r\n        require(msg.sender == owner, \"Not Owner\"); \r\n        _;\r\n    }\r\n\r\n    event ChangeNumber(uint oldNum, uint newNum);\r\n\r\n    function changeNum(uint _num) public onlyowner{ \r\n        uint old = num;  \r\n        num = _num;    \r\n        emit ChangeNumber(old, num);    \r\n    }\r\n\r\n    function getOwner() public view returns(address payable){\r\n        return owner;\r\n    }\r\n\r\n}\r\n",
+        "file": "contracts/5.Ownable.sol"
+      }
+    }
+  },
+  "contracts/4.StudentRegistry.sol": {
+    "__sources__": {
+      "contracts/4.StudentRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\ncontract StudentRegistry{\r\n    struct Student{\r\n        uint256 id;\r\n        string name;\r\n        uint256 age;\r\n        string department;\r\n        bool exists;\r\n    }\r\n\r\n    Student[] public studentList;\r\n\r\n    mapping(uint256 => Student) public students;\r\n\r\n    // id 被标记为 indexed，表示以后可以在链上日志里按 id 查找事件\r\n    event StudentAdded(uint256 indexed id, string name, uint256 age, string department);\r\n\r\n    function addStudent(uint256 _id, string memory _name, uint256 _age, string memory _department) public{\r\n        require(!students[_id].exists, \"Student already exists\");\r\n        students[_id] = Student(_id, _name, _age, _department, true);\r\n        studentList.push(students[_id]);\r\n        emit StudentAdded(_id, _name, _age, _department);\r\n    }\r\n\r\n    function getStudent(uint256 _id) public view returns(uint256, string memory, uint256, string memory){\r\n        require(students[_id].exists, \"Student does not exist\");\r\n        return(students[_id].id, students[_id].name, students[_id].age, students[_id].department);\r\n    }\r\n\r\n    function getAllStudents() public view returns(Student[] memory){\r\n        return studentList;\r\n    }\r\n}",
+        "file": "contracts/4.StudentRegistry.sol"
+      }
+    }
+  },
+  "contracts/6.Inherit.sol": {
+    "__sources__": {
+      "contracts/6.Inherit.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.13;\r\n\r\nabstract contract Geometry{\r\n    // 当合约中至少有一个函数没有被实现，或者合约没有为其所有的基本合约构造函数提供参数时， 合约必须被标记为 abstract。\r\n    function surfaceArea() public virtual returns(uint256);\r\n    function volume() public virtual returns(uint256);\r\n\r\n}\r\n\r\ncontract Cube is Geometry{\r\n    uint length;\r\n\r\n    constructor(uint _length){\r\n        length = _length;\r\n    }\r\n\r\n    event ChangeLength(uint oldLength, uint newLength);\r\n\r\n    function changeLength(uint _newLength) public {\r\n        uint old = length;\r\n        length = _newLength;\r\n        emit ChangeLength(old, length);\r\n    }\r\n\r\n    function surfaceArea() public view override returns(uint256){\r\n        return 6 * length * length;\r\n    }\r\n    function volume() public view  override  returns(uint256){\r\n        return length ** 3;\r\n    }\r\n\r\n}",
+        "file": "contracts/6.Inherit.sol"
       }
     }
   }
